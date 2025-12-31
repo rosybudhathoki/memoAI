@@ -7,6 +7,8 @@ import Link from 'next/link'
 import { clerk } from '@/lib/clerk-server'
 import { Button } from '@/src/components/ui/button'
 import TipTapEditor from '@/src/components/TipTapEditor'
+import DeleteButton from '@/src/components/DeleteButton'
+import { ArrowLeft } from 'lucide-react'
 
 type Props = {
   params: Promise<{ noteId: string }>
@@ -41,8 +43,8 @@ export default async function NotebookPage({ params }: Props) {
         <div className="border shadow-xl border-stone-200 rounded-lg p-4">
           <div className="flex items-center gap-3">
             <Link href="/dashboard">
-              <Button className="bg-green-600" size="sm">
-                Back
+              <Button className="bg-green-600 flex items-center gap-1" size="sm">
+                <ArrowLeft className="w-4 h-4" /> Back
               </Button>
             </Link>
 
@@ -56,13 +58,20 @@ export default async function NotebookPage({ params }: Props) {
               {note.name}
             </span>
             <div className='ml-auto'>
-              DELETE BUTTON
+             <DeleteButton noteId={note.id}/>
             </div>
           </div>
         </div>
         <div className='h4'></div>
         <div className='border-stone-200 shadow-xl border rounded-lg px-16 py-8 w-full'>
-            <TipTapEditor note={note}/>
+            <TipTapEditor
+              note={{
+                id: String(note.id),
+                name: note.name,
+                editorState: note.editorState ?? "",
+              }}
+            />
+
         </div>
       </div>
     </div>

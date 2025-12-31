@@ -1,38 +1,34 @@
-"use client"
+"use client";
+
 import { Dialog, DialogTrigger } from '@radix-ui/react-dialog';
 import React from 'react';
-import { Axis3DIcon, Loader2, Plus } from "lucide-react";
-import { DialogHeader, DialogFooter } from './ui/dialog';
+import { Plus, Loader2 } from "lucide-react";
+import { DialogHeader, DialogContent, DialogTitle, DialogDescription } from './ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from './ui/button';
-import { DialogContent, DialogDescription, DialogTitle, } from './ui/dialog';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
-type Props = {}
-
-const CreateNoteDialog = (props: Props) => {
+const CreateNoteDialog = () => {
   const router = useRouter();
-  const [input, setInput] = React.useState('')
+  const [input, setInput] = React.useState('');
+
   const CreateNoteBook = useMutation({
     mutationFn: async () => {
-      const respose = await axios.post('/api/createNoteBook',{
-        name: input
-      })
-      return respose.data
+      const response = await axios.post('/api/createNoteBook', { name: input });
+      return response.data;
     }
   });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement >) => {
-     e.preventDefault();
-
-     if (input === ""){
-      window.alert("Please enter a name for your notebook")
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!input.trim()) {
+      window.alert("Please enter a name for your notebook");
       return;
-     }
-     
-     CreateNoteBook.mutate(undefined, {
+    }
+
+    CreateNoteBook.mutate(undefined, {
       onSuccess: (data) => {
         const noteId = data?.note_id;
         if (typeof noteId !== "number") {
@@ -43,38 +39,40 @@ const CreateNoteDialog = (props: Props) => {
         router.push(`/notebook/${noteId}`);
       },
       onError: (error) => {
-        console.error("Error creating notebook");
+        console.error("Error creating notebook:", error);
         window.alert("Failed to create new notebook.");
       },
-    }); 
+    });
   };
-  
+
   return (
     <Dialog>
       <DialogTrigger>
-        <div className="border-dashed border-2 flex border-green-600 rounded-lg items-center justify-center sm:flex-col hover:shadow-xl transition-transform hover:-translate-y-1 p-4 cursor-pointer">
-          <Plus className="w-6 h-6 text-green-600" strokeWidth={3} />
-          <h2 className="font-semibold text-green-600 sm:mt-2">
-            New Note Book
+        {/* Centered box with dashed border */}
+        <div className=" h-68 border-2 border-dashed border-green-600 rounded-xl flex flex-col items-center justify-center hover:shadow-xl transition hover:-translate-y-1 duration-200 cursor-pointer p-6 w-full aspect-[2/1]">
+          <Plus className="w-8 h-8 text-green-600" strokeWidth={3} />
+          <h2 className="font-semibold text-green-600 mt-3 text-lg text-center">
+            New Notebook
           </h2>
         </div>
       </DialogTrigger>
+
       <DialogContent>
         <DialogHeader>
           <DialogTitle>New Notebook</DialogTitle>
           <DialogDescription>
-            You can create a new note by entering a name below.
+            Enter a name to create a new notebook.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
-          <Input value={input} onChange={(e=>setInput(e.target.value))} placeholder="Name..." />
-          <div className="h-4"></div>
-          <div className="flex items-center gap-2">
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <Input value={input} onChange={e => setInput(e.target.value)} placeholder="Name..." />
+          <div className="flex justify-end gap-2">
             <Button type="reset" variant="secondary">Cancel</Button>
-            <Button type="submit" className='bg-green-600' disabled={CreateNoteBook.isPending || !input.trim()}>
-              {
-                CreateNoteBook.isPending && (<Loader2 className='w-4 h-4 mr-2 animate-spin'/>
-                )}Create</Button>
+            <Button type="submit" className="bg-green-600" disabled={CreateNoteBook.isPending || !input.trim()}>
+              {CreateNoteBook.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              Create
+            </Button>
           </div>
         </form>
       </DialogContent>
