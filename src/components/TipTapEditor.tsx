@@ -28,9 +28,6 @@ const TipTapEditor = ({ note }: Props) => {
     api: "/api/completion",
 });
 
-console.log("🔥 HOOK INITIAL STATE:", completion);
-console.log("🔥 COMPONENT INSTANCE:", Math.random());
-
   const saveNote = useMutation({
     mutationFn: async () => {
       const response = await axios.post("/api/saveNote", {
@@ -69,13 +66,12 @@ console.log("🔥 COMPONENT INSTANCE:", Math.random());
   // ⭐ Insert completion when it arrives
   const lastCompletion = React.useRef("");
 
-React.useEffect(() => {
-  if (!completion || !editor) return;
-
-  const diff = completion;
-  editor.chain().focus().insertContent(diff).run();
-
-}, [completion, editor]);
+  React.useEffect(() => {
+    if (!completion || !editor) return;
+    const diff = completion.slice(lastCompletion.current.length);
+    lastCompletion.current = completion;
+    editor.commands.insertContent(diff);
+  }, [completion, editor]);
 
 
   // ⭐ Save note

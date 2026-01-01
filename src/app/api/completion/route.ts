@@ -9,7 +9,7 @@ export async function POST(req: Request) {
 
     console.log("SERVER PROMPT:", prompt);
 
-    const result = await streamText({
+    const result = streamText({
       model: openai("gpt-4o-mini"),
       messages: [
         {
@@ -27,14 +27,7 @@ export async function POST(req: Request) {
       ],
     });
 
-    const full = await result.text;
-
-    console.log("SERVER FULL COMPLETION:", full);
-
-    return new Response(
-      JSON.stringify({ completion: full }),
-      { headers: { "Content-Type": "application/json" } }
-    );
+    return result.toUIMessageStreamResponse();
 
   } catch (error) {
     console.error("Error in /api/completion:", error);
