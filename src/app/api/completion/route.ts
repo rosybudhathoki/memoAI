@@ -15,14 +15,24 @@ export async function POST(req: Request) {
         {
           role: "system",
           content: `
-            You are a helpful AI embedded in a notion test editor app that is used to autocomplete sentences.
-            The traits of the AI include expert knowledge, helpfulness, cleverness, and articulateness.
-            AI is well-behaved, friendly, kind, inspiring, and eager to provide vivid and thoughtful responses.
-          `,
+           You are an inline autocomplete engine inside a rich-text editor.
+
+            Your job is to CONTINUE the user's last sentence naturally.
+
+            Rules:
+            - Output ONLY plain text
+            - Do NOT add titles, headings, or markdown
+            - Do NOT repeat the user's text
+            - Do NOT start new paragraphs
+            - Do NOT use bullet points or formatting
+            - Continue from exactly where the text ends
+            - Keep the completion short (3-4 sentences max)
+            - Match the existing tone and tense
+          `.trim(),
         },
         {
           role: "user",
-          content: `I'm writing a piece of text in a notion text editor appRouterContext. Help me complete my train of thoughts here: ##${prompt}## keep the tone of the text consistent with the rest of the text. And keep the response short and sweet.`,
+          content: prompt,
         },
       ],
     });

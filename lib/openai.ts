@@ -1,4 +1,5 @@
 import { Configuration, OpenAIApi } from "openai-edge";
+import { persistImage } from "./cloudinary"; 
 
 const config = new Configuration({
   apiKey: process.env.OPENAI_API_KEY!,
@@ -70,4 +71,11 @@ export async function generateImage(image_description: string): Promise<string> 
     console.error("generateImage error:", error);
     throw error;
   }
+}
+
+  export async function generatePermanentImage(name: string): Promise<string> {
+    const imageDescription = await generateImagePrompt(name);
+    const tempUrl = await generateImage(imageDescription);
+    const permanentUrl = await persistImage(tempUrl);
+    return permanentUrl;
 }

@@ -20,7 +20,7 @@ type Props = {
 
 const TipTapEditor = ({ note }: Props) => {
   const [editorState, setEditorState] = React.useState(
-    note.editorState || `<h1>${note.name}</h1>`
+    note.editorState || `<h1>${note.name}</h1><p></p>`
   );
 
   // ⭐ useCompletion works perfectly with plain text responses
@@ -70,6 +70,7 @@ const TipTapEditor = ({ note }: Props) => {
     if (!completion || !editor) return;
     const diff = completion.slice(lastCompletion.current.length);
     lastCompletion.current = completion;
+    const cleanDiff = diff.replace(/^#+\s.*$/gm, "");
     editor.commands.insertContent(diff);
   }, [completion, editor]);
 
@@ -95,18 +96,22 @@ const TipTapEditor = ({ note }: Props) => {
         </Button>
       </div>
 
-      <div className="prose prose-sm w-full mt-4">
-        <EditorContent editor={editor} />
+      <div className="prose prose-sm mt-4">
+        <EditorContent
+          editor={editor}
+          className="p-2 bg-transparent focus:outline-none focus:ring-0 border-0"
+          style={{ outline: "none" }}
+        />
       </div>
 
       <div className="h-4"></div>
-      <span className="text-sm">
-        Tip: Press{" "}
-        <kbd className="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">
-          Shift + A
-        </kbd>{" "}
-        for AI autocomplete
-      </span>
+        <span className="text-sm">
+          <span className="font-semibold">Tip: </span> Press{" "}
+          <kbd className="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">
+            Tab
+          </kbd>{" "}
+          for AI autocomplete
+        </span>
     </>
   );
 };

@@ -10,8 +10,7 @@ export async function POST(req: Request) {
   try {
     await db
       .delete($notes)
-      .where(eq($notes.id, Number(noteId))); // convert string/number if needed
-
+      .where(eq($notes.id, Number(noteId))); 
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Delete note error:", error);

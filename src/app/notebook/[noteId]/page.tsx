@@ -37,8 +37,13 @@ export default async function NotebookPage({ params }: Props) {
   const user = await clerk.users.getUser(userId)
   const note = notes[0];
 
+  const toTitleCase = (str: string) =>
+  str.replace(/\w\S*/g, (txt) =>
+    txt.charAt(0).toUpperCase() + txt.slice(1).toLowerCase()
+  );
+
   return (
-    <div className="min-h-screen grainy p-8">
+    <div className="w-screen h-screen grainy flex flex-col p-8">
       <div className="max-w-4xl mx-auto">
         <div className="border shadow-xl border-stone-200 rounded-lg p-4">
           <div className="flex items-center gap-3">
@@ -55,7 +60,7 @@ export default async function NotebookPage({ params }: Props) {
              /
             </span>
             <span className="text-stone-500 font-semibold">
-              {note.name}
+              {toTitleCase(note.name)}
             </span>
             <div className='ml-auto'>
              <DeleteButton noteId={note.id}/>
@@ -67,7 +72,7 @@ export default async function NotebookPage({ params }: Props) {
             <TipTapEditor
               note={{
                 id: String(note.id),
-                name: note.name,
+                name: toTitleCase(note.name),
                 editorState: note.editorState ?? "",
               }}
             />
