@@ -31,23 +31,22 @@
 
 1. Clone the repo:
  
-git clone https://github.com/yourusername/memoai.git
-cd memoai
+- git clone https://github.com/yourusername/memoai.git
+- cd memoai
 
 3. Install dependencies:
 
-npm install
+- npm install
 
 3. Create .env.local with:
 
-DATABASE_URL=your_postgresql_url
-NEXT_PUBLIC_CLERK_FRONTEND_API=your_clerk_frontend_api
-CLERK_API_KEY=your_clerk_api_key
-OPENAI_API_KEY=your_openai_key
-
+- DATABASE_URL=your_postgresql_url
+- NEXT_PUBLIC_CLERK_FRONTEND_API=your_clerk_frontend_api
+- CLERK_API_KEY=your_clerk_api_key
+- OPENAI_API_KEY=your_openai_key
 
 4. Run development server:
 
-npm run dev
+- npm run dev
 
 5. Open http://localhost:3000
