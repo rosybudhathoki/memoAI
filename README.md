@@ -30,16 +30,13 @@
 ## 💻 Installation
 
 1. Clone the repo:
-2. 
+ 
 git clone https://github.com/yourusername/memoai.git
 cd memoai
 
 3. Install dependencies:
 
 npm install
-# or
-yarn install
-
 
 3. Create .env.local with:
 
@@ -52,8 +49,5 @@ OPENAI_API_KEY=your_openai_key
 4. Run development server:
 
 npm run dev
-# or
-yarn dev
-
 
 5. Open http://localhost:3000
